@@ -35,6 +35,7 @@ class ETLMicrodadosCensoEscolar:
         totais = {
             'QT_TUR_BAS' : 'qtd_turmas_ed_basica', #quantidade de turmas da educação básica
             'QT_MAT_BAS' : 'qtd_matr_ed_basica', #quantidade de matrículas da educação básica
+            'QT_MAT_MED' : 'qtd_matr_medio', #quantidade de matrículas do ensino médio
         }
         matriculas_basica_cor = {
             'QT_MAT_BAS_ND' : 'qtd_matr_ed_basica_nao_declarada',
@@ -182,7 +183,8 @@ class ETLMicrodadosCensoEscolar:
             df = self.filtrar_sp(df)
             df = self.filtrar_escolas_estaduais(df)
             df = self.filtrar_escolas_em_atividade(df)
-            df = self.filtrar_escolas_fund_II(df)
+            # nao queremos mais escoal fund II, só médio
+            #df = self.filtrar_escolas_fund_II(df)
             df = self.filtrar_escolas_escolas_medio(df)
             df = self.remover_escolas_tecnico(df)
             #limpeza
