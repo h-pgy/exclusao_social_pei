@@ -122,6 +122,27 @@ class ETLMicrodadosCensoEscolar:
         df = df[df['TP_SITUACAO_FUNCIONAMENTO'] == 1].copy()
         return df
     
+    def filtrar_escolas_fund_II(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Filtra o DataFrame para incluir apenas as escolas que oferecem ensino fundamental II.
+        """
+        df_fund_II = df[df['IN_FUND_AF'] == 1].copy()  # 1 é o código para ensino fundamental II
+        return df_fund_II
+    
+    def filtrar_escolas_escolas_medio(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Filtra o DataFrame para incluir apenas as escolas que oferecem ensino médio.
+        """
+        df_medio = df[df['IN_MED'] == 1].copy()  # 1 é o código para ensino médio
+        return df_medio
+    
+    def remover_escolas_tecnico(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Remove as escolas que oferecem ensino técnico.
+        """
+        df_sem_tecnico = df[df['IN_PROF_TEC'] == 0].copy()  # 0 é o código para não oferecer ensino técnico
+        return df_sem_tecnico
+    
     def filtrar_cols_interesse(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Filtra o DataFrame para incluir apenas as colunas de interesse.
@@ -157,9 +178,14 @@ class ETLMicrodadosCensoEscolar:
         print('Lendo e processando os dados...')
         for ano in tqdm(self.range_anos):
             df = self.read_data(ano)
+            #filtros
             df = self.filtrar_sp(df)
             df = self.filtrar_escolas_estaduais(df)
             df = self.filtrar_escolas_em_atividade(df)
+            df = self.filtrar_escolas_fund_II(df)
+            df = self.filtrar_escolas_escolas_medio(df)
+            df = self.remover_escolas_tecnico(df)
+            #limpeza
             df = self.filtrar_cols_interesse(df)
             df_final = pd.concat([df_final, df], ignore_index=True)
 
